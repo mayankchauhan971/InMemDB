@@ -91,7 +91,7 @@ module.exports = class myDB  {
     */
     this.commit = function () {
     	if (this.tIndex === 0) {
-    		this.transactionMode = false;
+        this.transactionMode = false;
     	}
     	if (this.tIndex > 0) {
 	    	// Sync Data from transaction
@@ -99,8 +99,9 @@ module.exports = class myDB  {
 	    	// Clear out the transaction data
 	    	this.data[this.tIndex] = {};
 	    	// Point to earlier version of data
-	    	this.tIndex--;
-    	}
+        this.tIndex--;
+      }
+      return this.tIndex;
     };
 
   /* {@function} download - Downloads the content of DB into db_dump.txt
