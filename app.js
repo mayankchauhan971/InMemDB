@@ -23,6 +23,7 @@ readInput.on('line', (input)=>{
 		value = cmd[2] || null; 
 	}
 
+  let transactionIndex;
 	switch (cmd[0]) {
 		case 'SET':
 			db.set(key, value);
@@ -40,15 +41,17 @@ readInput.on('line', (input)=>{
 			db.begin();
 			break;
 		case 'ROLLBACK':
-      let transactionIndex = db.rollback();
-			if ( transactionIndex == -1) console.log('TRANSACTION NOT FOUND');
-      else console.log(transactionIndex);
+      transactionIndex = db.rollback();
+			if ( transactionIndex == -1) console.log('Transaction not found!!');
+      else console.log("Rolled back transaction with ID " + transactionIndex);
 			break; 
 		case 'COMMIT':
-			db.commit();
+      transactionIndex = db.commit();
+      if ( transactionIndex == -1) console.log('Transaction not found!!');
+      else console.log("Commited to DB with Transaction ID as " + transactionIndex);
       break;
     case 'DOWNLOAD':
-      db.download();
+      db.download(); 
       break;
 		case 'END':
       readInput.close();
