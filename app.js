@@ -1,9 +1,11 @@
 const path = require('path');
 const readline = require('readline');
 const dbBackend = require(path.resolve('./dbBackend'));
+
 const readInput = readline.createInterface({
   input: process.stdin,
-  output: process.stdout
+  output: process.stdout,
+  terminal: false
 });
 
 let db = new dbBackend();
@@ -32,21 +34,24 @@ readInput.on('line', (input)=>{
 			db.delete('a');
 			break;
 		case 'COUNT':
-			console.log(db.count(key));;
+			console.log(db.count(key));
 			break;
 		case 'BEGIN':
 			db.begin();
 			break;
 		case 'ROLLBACK':
-			if (db.rollback() < 0) {
-				console.log('TRANSACTION NOT FOUND');
-			}
-			break;
+      let transactionIndex = db.rollback();
+			if ( transactionIndex == -1) console.log('TRANSACTION NOT FOUND');
+      else console.log(transactionIndex);
+			break; 
 		case 'COMMIT':
 			db.commit();
-			break;
+      break;
+    case 'DOWNLOAD':
+      db.download();
+      break;
 		case 'END':
-      rl.close();
+      readInput.close();
 			console.log('----------- InMemDB Closed!! -----------');
 			break;
 		case 'OPTIONS':
@@ -55,7 +60,8 @@ readInput.on('line', (input)=>{
 				'BEGIN\nROLLBACK\nCOMMIT\nEND\n');
 			break;
 		default: 
-			console.log('\nInvalid input. Please try again.\n' + 'Use OPTIONS to see all possible commands\n');
+      console.log('\nInvalid input. Please try again.\n' + 
+        'Use OPTIONS to see all possible commands\n');
 			break;
 	}
 
