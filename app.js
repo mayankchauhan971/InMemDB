@@ -1,3 +1,4 @@
+const { time } = require('console');
 const path = require('path');
 const readline = require('readline');
 const dbBackend = require(path.resolve('./dbBackend'));
@@ -11,7 +12,8 @@ const readInput = readline.createInterface({
 let db = new dbBackend();
 console.log("----------- InMemDB Ready!! -----------");
 
-
+var start = new Date();
+console.info(start);
 readInput.on('line', (input)=>{
   let cmd = input.split(' ');
   cmd[0] = cmd[0].toUpperCase();
@@ -55,6 +57,8 @@ readInput.on('line', (input)=>{
       break;
 		case 'END':
       readInput.close();
+      var end = new Date() - start;
+      console.info(end);
 			console.log('----------- InMemDB Closed!! -----------');
 			break;
 		case 'OPTIONS':

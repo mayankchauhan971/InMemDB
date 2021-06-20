@@ -99,7 +99,6 @@ module.exports = class myDB  {
 	    	// Clear out the transaction data
 	    	this.data[this.tIndex] = {};
 	    	// Point to earlier version of data
-        this.tIndex--;
       }
       return this.tIndex;
     };
@@ -109,9 +108,9 @@ module.exports = class myDB  {
     */
 
     this.download = function () {
-      var db_dump;
+      var db_dump = [];
       this.data.forEach((entry) => {
-        db_dump = JSON.stringify(entry);
+        db_dump.push(JSON.stringify(entry));
       });
       fs.writeFileSync('database.json', db_dump);
       console.log("------- Saving DB to db_dump.json -------");
